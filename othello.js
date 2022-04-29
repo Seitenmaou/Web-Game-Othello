@@ -71,48 +71,20 @@ function isPlaceable(row, column, color){
         modifier = 1
     }
     
-    
-    //=========SUBJECT TO CHANGE============CHECKING FUNCTION VER1===========
-    //Ex [2][4],2
-    //check right
-    //end of array?
-    if (column < 7){
-        //same color or opposite?
-        if (gameBoard[row][column + 1] == (color + modifier)){
-            //if opposing color, keep going, otherwise check next pos
-            //if own color after opposing color, return true, otherwise check next pos
-            for (currentColomn = column; currentColomn <= 7; currentColomn++){
-                if (gameBoard[row][currentColomn] == color){
-                    isPlaceable = true;
-                }
-            }
-        }
-    }
-    //check bottom right, repeat
-    //check bottom, repeat
-    //check bottom left, repeat
-    //check left repeat
-    //check left top, repeat
-    //check top, repeat
-    //check top right, repeat
-    //return result
-
-
     //=========SUBJECT TO CHANGE============CHECKING FUNCTION VER2===========faster?
-    //TODO FIX ASAP: WHEN POS IS ONE BEFORE BORDER
     let rightBorder = false;
     let bottomBorder = false;
     let leftBorder = false;
     let topBorder = false;
 
     //Check Right for wall (the end of array) (only need to check one slot)
-    if (column == 7){
+    if (column >= 6){
         rightBorder = true;
     }else{ //check right slot
         if (gameBoard[row][column + 1] == (color + modifier)){
             //if opposing color, keep going, otherwise check next pos
             //if own color after opposing color, return true, otherwise check next pos
-            for (currentColomn = column; currentColomn <= 7; currentColomn++){
+            for (let currentColomn = column; currentColomn <= 7; currentColomn++){
                 if (gameBoard[row][currentColomn] == color){
                     isPlaceable = true;
                 }
@@ -121,14 +93,14 @@ function isPlaceable(row, column, color){
     }
 
     //Check Bottom for wall (only need to check one slot)
-    if (row == 7){
+    if (row >= 6){
         bottomBorder = true;
     }else{ //check bottom slot
         if (gameBoard[row + 1][column] == (color + modifier)){
             //if opposing color, keep going, otherwise check next pos
             //if own color after opposing color, return true, otherwise check next pos
-            for (currentRow = row; currentRow <= 7; currentRow++){
-                if (gameBoard[row][currentColomn] == color){
+            for (let currentRow = row; currentRow <= 7; currentRow++){
+                if (gameBoard[currentRow][column] == color){
                     isPlaceable = true;
                 }
             }
@@ -136,13 +108,13 @@ function isPlaceable(row, column, color){
     }
 
     //Check Left for wall (only need to check one slot)
-    if (column == 0){
+    if (column <= 1){
         leftBorder = true;
     }else{ //check left slot
         if (gameBoard[row][column - 1] == (color + modifier)){
             //if opposing color, keep going, otherwise check next pos
             //if own color after opposing color, return true, otherwise check next pos
-            for (currentColomn = column; currentColomn >= 0; currentColomn--){
+            for (let currentColomn = column; currentColomn >= 0; currentColomn--){
                 if (gameBoard[row][currentColomn] == color){
                     isPlaceable = true;
                 }
@@ -151,14 +123,14 @@ function isPlaceable(row, column, color){
     }
 
     //Check Top for wall (only need to check one slot)
-    if (row == 0){
+    if (row <= 1){
         topBorder = true;
     }else{ //check top slot
         if (gameBoard[row - 1][column] == (color + modifier)){
             //if opposing color, keep going, otherwise check next pos
             //if own color after opposing color, return true, otherwise check next pos
-            for (currentRow = row; currentRow >= 0; currentRow--){
-                if (gameBoard[row][currentColomn] == color){
+            for (let currentRow = row; currentRow >= 0; currentRow--){
+                if (gameBoard[currentRow][column] == color){
                     isPlaceable = true;
                 }
             }
@@ -167,11 +139,53 @@ function isPlaceable(row, column, color){
 
     //Ignore any section with walls
     //Check Remaining Sides
-    if (!rightBorder){}
+    //skip if already placeable
 
-
-
-
+    if (!topBorder && !rightBorder && !isPlaceable){
+        if (gameBoard[row - 1][column + 1] == (color + modifier)){
+            //if opposing color, keep going, otherwise check next pos
+            //if own color after opposing color, return true, otherwise check next pos
+            for (let i = 0; ((row - i >= 0) && (column + i <= 7)); i++){
+                if (gameBoard[row - i][column + i] == color){
+                    isPlaceable = true;
+                }
+            }
+        }
+    }
+    if(!bottomBorder && !rightBorder && !isPlaceable){
+        if (gameBoard[row + 1][column + 1] == (color + modifier)){
+            //if opposing color, keep going, otherwise check next pos
+            //if own color after opposing color, return true, otherwise check next pos
+            for (let i = 0; ((row + i <= 7) && (column + i <= 7)); i++){
+                if (gameBoard[row + i][column + i] == color){
+                    isPlaceable = true;
+                }
+            }
+        }
+    }
+    if (!topBorder && !leftBorder &&isPlaceable){
+        if (gameBoard[row - 1][column - 1] == (color + modifier)){
+            //if opposing color, keep going, otherwise check next pos
+            //if own color after opposing color, return true, otherwise check next pos
+            for (let i = 0; ((row - i >= 0) && (column - i >= 0)); i++){
+                if (gameBoard[row - i][column + i] == color){
+                    isPlaceable = true;
+                }
+            }
+        }
+    }
+    if(!bottomBorder && !leftBorder && !isPlaceable){
+        if (gameBoard[row + 1][column - 1] == (color + modifier)){
+            //if opposing color, keep going, otherwise check next pos
+            //if own color after opposing color, return true, otherwise check next pos
+            for (let i = 0; ((row + i <= 7) && (column - i >= 0)); i++){
+                if (gameBoard[row + i][column - i] == color){
+                    isPlaceable = true;
+                }
+            }
+        }
+    }
+    return isPlaceable
 }
 
 //function to set surronding peices to available once board updates
@@ -192,8 +206,9 @@ function setStartingPieces(){
 }
 
 setStartingPieces()
-updateAvailableSpotWhitesTurn()
+//updateAvailableSpotWhitesTurn()
 displayDebugGrid()
+console.log(isPlaceable(2,5,2))
 //console.table(gameBoard)
 
 
