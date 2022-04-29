@@ -189,10 +189,12 @@ function isPlaceable(row, column, color){
 }
 
 //function to set surronding peices to available once board updates
-function updateAvailableSpotWhitesTurn(){
+function updateAvailableSpot(color){
     for (let row = 0; row < 7; row++){
         for (let column = 0; column < 7; column++){
-            
+            if ((gameBoard[row][column] != 2) && (gameBoard[row][column] != 3) && isPlaceable(row, column, color)){
+                gameBoard[row][column] = 1
+            }
         }
     }
 }
@@ -206,9 +208,8 @@ function setStartingPieces(){
 }
 
 setStartingPieces()
-//updateAvailableSpotWhitesTurn()
+updateAvailableSpot(3)
 displayDebugGrid()
-console.log(isPlaceable(2,5,2))
 //console.table(gameBoard)
 
 
