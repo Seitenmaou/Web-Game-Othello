@@ -76,8 +76,10 @@ function isPlaceable(row, column, color){
     let modifier = 0
     if (color == 3){
         modifier = -1
-    } else {
+    } else if (color == 2){
         modifier = 1
+    } else {
+        color = 0
     }
 
     let listAddition = {
@@ -106,9 +108,7 @@ function isPlaceable(row, column, color){
     listAddition.currentSlot[1] = column
     listAddition.slotID = boardSlot
 
-    console.log(`Section: [${row}, ${column}]`)
-
-    if ((gameBoard[row][column] == 2) || (gameBoard[row][column] == 3 )){
+    if (gameBoard[row][column] == color){
         checkList.push(listAddition)
         return listAddition.isPlaceable
     } else {
@@ -285,41 +285,94 @@ function isPlaceable(row, column, color){
 //gameboard perspectives (to show avail placement) maybe?
 function updateAvailableSpot(color){
     boardSlot = 0 
+    let spotAvailable = false
     for (let row = 0; row <= 7; row++){
         for (let column = 0; column <= 7; column++){
-            if (isPlaceable(row, column, color)){
+            if ((isPlaceable(row, column, color))){
                 gameBoard[row][column] = 1
+                spotAvailable =  true
+            }else if ((gameBoard[row][column] !== 2)&& (gameBoard[row][column] !== 3)){
+                gameBoard[row][column] = 0
             }
             boardSlot++
         }
     }
+    return spotAvailable
 }
 
 //function to place a color
-function placeColor(row, column, color, checkList){
+function placeColor(row, column, color){
     if (isPlaceable(row, column, color)){
         //confirm
         //highlight possible changes in green?
-        gameboard[row][column] = color;
+        gameBoard[row][column] = color;
+        console.log(`Placed!`)
         //flip all affected
         flipPieces(row, column, color)
+        console.log(`Flipped`)
 
         //Next turn
 
     }else{
         //Reject
         //glow red or something?
+        console.log(`Cant place here!`)
     }
 }
 
 //function to flip colors
-function flipPieces(row, column, color, checkList){
-
+function flipPieces(row, column, color){
+    currentSlotID = searchList(row, column)
+    //get start location
+    //get end location horiz, both ways, flip inbetween
+    if (checkList[currentSlotID].isPlaceableRight){
+        for (let currentColumn = (column + 1); currentColumn <= checkList[currentSlotID].endPointRight[1]; currentColumn++){
+            gameBoard[row][currentColumn] = color
+        }
+    }
+    if (checkList[currentSlotID].isPlaceableLeft){
+        for (let currentColumn = (column - 1); currentColumn <= checkList[currentSlotID].endPointLeft[1]; currentColumn--){
+            gameBoard[row][currentColumn] = color
+        }
+    }
+    //get end location vert, both ways, flip inbetween
+    //get end location vert, all 4 ways, flip inbetween
 }
 
+//search checkList with coord, return ID
+function searchList(row, column){
+    for (let searchIndex = 0; searchIndex < checkList.length; searchIndex++){
+        if ((checkList[searchIndex].currentSlot[0] == row) && (checkList[searchIndex].currentSlot[1] == column)){
+            return checkList[searchIndex].slotID
+        }
+    }
+    return null
+}
 
 //update gameboard per turns
 //animations maybe
+function nextTurn(color){
+    clearCheckList()
+    if(updateAvailableSpot(color)){
+        displayDebugGrid()
+
+        placeColor(4,2, color) //wait for button input 4,2 for test purpose
+
+        // if (color == 2){
+        //     nextTurn(3)
+        // }else{
+        //     nextTurn(2)
+        // }
+        
+    }
+    else{
+        gameOver()
+    }
+}
+
+function gameOver(){
+    //display message and reset option
+}
 
 //set board up to starting position
 function setStartingPieces(){
@@ -329,14 +382,33 @@ function setStartingPieces(){
     gameBoard[4][3] = 3
 }
 
-setStartingPieces()
-displayDebugGrid()
-updateAvailableSpot(3)
-displayDebugGrid()
-console.log(checkList)
-clearCheckList()
-console.log(checkList)
-//console.table(gameBoard)
+function startGame(){
+    setStartingPieces()
+    let color = 2 //start with white
+
+    //nextTurn(2)
+
+    console.log('START!')
+    displayDebugGrid()
+    console.log('WHITE AVAIL PLACEMENT')
+    updateAvailableSpot(2)
+    displayDebugGrid()
+    placeColor(4, 2, 2)
+    clearCheckList()
+    updateAvailableSpot(3)
+    console.log('BLACK AVAIL PLACEMENT')
+    displayDebugGrid()
+    placeColor(3, 2, 3)
+    clearCheckList()
+    updateAvailableSpot(2)
+    console.log('WHITE AVAIL PLACEMENT')
+    displayDebugGrid()
+    console.log(checkList)
+
+}
+
+startGame()
+
 
 
 
