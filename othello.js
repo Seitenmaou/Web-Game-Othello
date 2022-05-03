@@ -10,6 +10,7 @@
 //3 as occupied by black ⚫
 //4 as best possible choice for placement maybe? ◎
 
+//Board for game
 let gameBoard = [
     [0,0,0,0,0,0,0,0],
     [0,0,0,0,0,0,0,0],
@@ -21,6 +22,8 @@ let gameBoard = [
     [0,0,0,0,0,0,0,0]
 ]
 
+
+//show board in console
 function displayDebugGrid(){
     let debugBoard = [
         [0,0,0,0,0,0,0,0],
@@ -291,7 +294,7 @@ function updateAvailableSpot(color){
             if ((isPlaceable(row, column, color))){
                 gameBoard[row][column] = 1
                 spotAvailable =  true
-            }else if ((gameBoard[row][column] !== 2)&& (gameBoard[row][column] !== 3)){
+            } else if ((gameBoard[row][column] !== 2)&& (gameBoard[row][column] !== 3)){
                 gameBoard[row][column] = 0
             }
             boardSlot++
@@ -390,8 +393,8 @@ function startGame(){
 
     console.log('START!')
     displayDebugGrid()
-    console.log('WHITE AVAIL PLACEMENT')
     updateAvailableSpot(2)
+    console.log('WHITE AVAIL PLACEMENT')
     displayDebugGrid()
     placeColor(4, 2, 2)
     clearCheckList()
@@ -408,12 +411,3 @@ function startGame(){
 }
 
 startGame()
-
-
-
-
-
-
-
-
-//reset button

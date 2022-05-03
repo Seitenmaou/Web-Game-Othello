@@ -8,3 +8,7 @@
 //create peices
 //circular white piece
 //circular black piece
+
+
+
+//Check canvas
