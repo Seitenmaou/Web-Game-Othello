@@ -24,14 +24,25 @@ function addSlots(){
         let slot = document.createElement('div')
         slot.id = `slot-${slotNum}`
         slot.className = 'slots'
+        //Button
+        addButton(slot, slotNum)
         grid.appendChild(slot)
     }
 }
 
-//create peices
-//circular white piece
-//circular black piece
+function addButton(doc, id){
+    let button  = document.createElement('Button')
+    button.id = `button-${id}`
+    button.className = 'buttons'
+    button.addEventListener('click', () =>{
+        takeTurn(id, color)
+    })
+    doc.appendChild(button)
+}
+
+
 
 addGamePanel()
 makeBoard()
 addSlots()
+//updateBoardVisualStart()

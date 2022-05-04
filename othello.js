@@ -86,6 +86,7 @@ function isPlaceable(row, column, color){
     }
 
     let listAddition = {
+        currentColor: null,
         isPlaceable: false,
         currentSlot: [null, null],
         slotID: null,
@@ -107,6 +108,7 @@ function isPlaceable(row, column, color){
         endPointTop: [null, null]
     }
 
+    listAddition.currentColor = color
     listAddition.currentSlot[0] = row
     listAddition.currentSlot[1] = column
     listAddition.slotID = boardSlot
@@ -325,7 +327,7 @@ function placeColor(row, column, color){
 
 //function to flip colors
 function flipPieces(row, column, color){
-    currentSlotID = searchList(row, column)
+    currentSlotID = searchIDFromCoord(row, column)
     //get start location
     //get end location horiz, both ways, flip inbetween
     if (checkList[currentSlotID].isPlaceableRight){
@@ -334,22 +336,52 @@ function flipPieces(row, column, color){
         }
     }
     if (checkList[currentSlotID].isPlaceableLeft){
-        for (let currentColumn = (column - 1); currentColumn <= checkList[currentSlotID].endPointLeft[1]; currentColumn--){
+        for (let currentColumn = (column - 1); currentColumn >= checkList[currentSlotID].endPointLeft[1]; currentColumn--){
             gameBoard[row][currentColumn] = color
         }
     }
     //get end location vert, both ways, flip inbetween
+    if (checkList[currentSlotID].isPlaceableTop){
+        for (let currentRow = (row - 1); currentRow >= checkList[currentSlotID].endPointTop[0]; currentRow--){
+            gameBoard[currentRow][column] = color
+        }
+    }
+    if (checkList[currentSlotID].isPlaceableBottom){
+        for (let currentRow = (row + 1); currentRow <= checkList[currentSlotID].endPointBottom[1]; currentRow++){
+            gameBoard[currentRow][column] = color
+        }
+    }
     //get end location vert, all 4 ways, flip inbetween
+    
+
 }
 
 //search checkList with coord, return ID
-function searchList(row, column){
+function searchIDFromCoord(row, column){
     for (let searchIndex = 0; searchIndex < checkList.length; searchIndex++){
         if ((checkList[searchIndex].currentSlot[0] == row) && (checkList[searchIndex].currentSlot[1] == column)){
             return checkList[searchIndex].slotID
         }
     }
     return null
+}
+
+function searchCoordFromID(slotID){
+    for (let searchIndex = 0; searchIndex < checkList.length; searchIndex++){
+        if (checkList[searchIndex].slotID == slotID){
+            return checkList[searchIndex].currentSlot
+        }
+    }
+    return null
+}
+
+
+function takeTurn(slotID, color){
+    let placeByCoord = searchCoordFromID(slotID)
+    console.log(`You chose ${placeByCoord} with color ${color}`)
+    placeColor(placeByCoord[0], placeByCoord[1], color)
+    updateBoardVisual(getCurrentBoard())
+    
 }
 
 //update gameboard per turns
@@ -377,37 +409,71 @@ function gameOver(){
     //display message and reset option
 }
 
+function getCurrentBoard (){
+    let currentPlacement = []
+    for (let row = 0; row < 8; row++){
+        for (let column = 0; column < 8; column++){
+            currentPlacement.push(gameBoard[row][column])
+        }
+    }
+    return currentPlacement
+}
+
+function updateBoardVisual(currentBoardData){
+    for (let slotNum = 0; slotNum < 64; slotNum++){
+        let button = document.getElementById(`button-${slotNum}`)
+        if (currentBoardData[slotNum] == 2){
+            button.classList.remove('buttons')
+            button.classList.remove('buttonsBlack')
+            button.classList.add('buttonsWhite')
+        } else if (currentBoardData[slotNum] == 3){
+            button.classList.remove('buttons')
+            button.classList.remove('buttonsWhite')
+            button.classList.add('buttonsBlack')
+        }
+    }
+}
+
 //set board up to starting position
 function setStartingPieces(){
     gameBoard[3][3] = 2
     gameBoard[4][4] = 2
     gameBoard[3][4] = 3
     gameBoard[4][3] = 3
+    displayDebugGrid()
+    updateAvailableSpot(2)
+    updateBoardVisual(getCurrentBoard())
 }
 
 function startGame(){
     setStartingPieces()
-    let color = 2 //start with white
+    //wait for button, then change turn
+
 
     //nextTurn(2)
 
-    console.log('START!')
-    displayDebugGrid()
-    updateAvailableSpot(2)
-    console.log('WHITE AVAIL PLACEMENT')
-    displayDebugGrid()
-    placeColor(4, 2, 2)
-    clearCheckList()
-    updateAvailableSpot(3)
-    console.log('BLACK AVAIL PLACEMENT')
-    displayDebugGrid()
-    placeColor(3, 2, 3)
-    clearCheckList()
-    updateAvailableSpot(2)
-    console.log('WHITE AVAIL PLACEMENT')
-    displayDebugGrid()
-    console.log(checkList)
+    // console.log('START!')
+    // displayDebugGrid()
+    // updateAvailableSpot(2)
+    // console.log('WHITE AVAIL PLACEMENT')
+    // displayDebugGrid()
+    // placeColor(4, 2, 2)
+    // clearCheckList()
+    // updateAvailableSpot(3)
+    // console.log('BLACK AVAIL PLACEMENT')
+    // displayDebugGrid()
+    // placeColor(3, 2, 3)
+    // clearCheckList()
+    // updateAvailableSpot(2)
+    // console.log('WHITE AVAIL PLACEMENT')
+    // displayDebugGrid()
+    // console.log(checkList)
 
 }
 
-startGame()
+
+let color = 2 //start with white
+window.onload = function(){
+    startGame()
+}
+
