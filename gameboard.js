@@ -11,7 +11,7 @@ function addGamePanel(){
     document.body.append(gamePanel)
 }
 
-function makeBoard(){
+function addBoard(){
     const panel = document.querySelector('#gamePanel')
     const mainBoard = document.createElement('div')
     mainBoard.id = 'mainBoard'
@@ -40,9 +40,54 @@ function addButton(doc, id){
     doc.appendChild(button)
 }
 
+function addGameTracker(){
+    const panel = document.querySelector('#gamePanel')
+    const gameTracker = document.createElement('div')
+    gameTracker.id = 'gameTracker'
+    panel.appendChild(gameTracker)
+}
 
+function addTurnColor(){
+    const tracker = document.querySelector('#gameTracker')
+    const turnColor = document.createElement('div')
+    turnColor.id = 'turnColor'
+    turnColor.innerHTML = '<h3>Current Turn<h3>'
+    tracker.appendChild(turnColor)
+}
+
+function addScoreBoard(){
+    const tracker = document.querySelector('#gameTracker')
+    const scoreBoard = document.createElement('div')
+    scoreBoard.id = 'scoreBoard'
+    scoreBoard.innerHTML = '<h3>Score</h3><p>White</p><p>Black</p>'
+    tracker.appendChild(scoreBoard)
+}
+
+function addSystemButtons(){
+    const tracker = document.querySelector('#gameTracker')
+
+    const resetButton = document.createElement('button')
+    resetButton.id = 'resetButton'
+    resetButton.textContent = 'RESET'
+
+    const hintButton = document.createElement('button')
+    hintButton.id = 'hintButton'
+    hintButton.textContent = 'HINT'
+
+    tracker.appendChild(resetButton)
+    tracker.appendChild(hintButton)
+
+    resetButton.addEventListener('click', () => {
+        startGame()
+    })
+
+}
 
 addGamePanel()
-makeBoard()
+addBoard()
+addGameTracker()
 addSlots()
+addTurnColor()
+addScoreBoard()
+addSystemButtons()
 //updateBoardVisualStart()
