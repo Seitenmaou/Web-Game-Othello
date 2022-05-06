@@ -1,21 +1,38 @@
+#gamePanel {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    background-color: rgb(208, 255, 199);
+    height: 100%;
+}
+
+#gameTracker {
+    display: grid;
+    grid-column: 3/4;
+    grid-row: 1/4;
+    background-color: rgb(47, 133, 30);
+    margin: 10px;
+}
+
 #mainBoard {
+    grid-column: 1/3;
+    grid-row: 1/4;
     display: grid;
     grid-template-columns: auto auto auto auto auto auto auto auto;
-    background-color: green;
+    background-color: black;
+    margin: 10px;
     padding: 10px;
-    width: 50vw;
-    height: 50vw;
+    aspect-ratio: 1;
 }
 
 .slots {
-    background: lightgreen;
+    background-color: rgb(76, 120, 67);
     border: 1px solid black;
     padding: 10px;
     text-align: center;
 }
 
 .buttons {
-    background-color: lightgreen;
+    background-color: rgb(76, 120, 67);
     width: 100%;
     height: 100%;
     border-radius: 50%;
