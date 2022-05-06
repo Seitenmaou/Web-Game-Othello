@@ -363,23 +363,27 @@ function flipPieces(row, column, color){
     //get start location
     //get end location horiz, both ways, flip inbetween
     if (checkList[currentSlotID].isPlaceableRight){
-        for (let currentColumn = (column + 1); currentColumn <= checkList[currentSlotID].endPointRight[1]; currentColumn++){
+        for (let currentColumn = (column + 1); currentColumn < checkList[currentSlotID].endPointRight[1]; currentColumn++){
+            console.log(`Flipping ${row}, ${currentColumn}`)
             gameBoard[row][currentColumn] = color
         }
     }
     if (checkList[currentSlotID].isPlaceableLeft){
-        for (let currentColumn = (column - 1); currentColumn >= checkList[currentSlotID].endPointLeft[1]; currentColumn--){
+        for (let currentColumn = (column - 1); currentColumn > checkList[currentSlotID].endPointLeft[1]; currentColumn--){
+            console.log(`Flipping ${row}, ${currentColumn}`)
             gameBoard[row][currentColumn] = color
         }
     }
     //get end location vert, both ways, flip inbetween
     if (checkList[currentSlotID].isPlaceableTop){
-        for (let currentRow = (row - 1); currentRow >= checkList[currentSlotID].endPointTop[0]; currentRow--){
+        for (let currentRow = (row - 1); currentRow > checkList[currentSlotID].endPointTop[0]; currentRow--){
+            console.log(`Flipping ${curentRow}, ${column}`)
             gameBoard[currentRow][column] = color
         }
     }
     if (checkList[currentSlotID].isPlaceableBottom){
-        for (let currentRow = (row + 1); currentRow <= checkList[currentSlotID].endPointBottom[0]; currentRow++){
+        for (let currentRow = (row + 1); currentRow < checkList[currentSlotID].endPointBottom[0]; currentRow++){
+            console.log(`Flipping ${currentRow}, ${column}`)
             gameBoard[currentRow][column] = color
         }
     }
@@ -388,14 +392,15 @@ function flipPieces(row, column, color){
         let currentColumn = (column)
         for (let currentRow = (row - 1); currentRow > checkList[currentSlotID].endPointTopRight[0]; currentRow--){
             currentColumn++
+            console.log(`Flipping ${currentRow}, ${currentColumn}`)
             gameBoard[currentRow][currentColumn] = color
         }
     }
     if (checkList[currentSlotID].isPlaceableBottomRight){
         let currentColumn = (column)
         for (let currentRow = (row + 1); currentRow < checkList[currentSlotID].endPointBottomRight[0]; currentRow++){
-            
             currentColumn++
+            console.log(`Flipping ${currentRow}, ${currentColumn}`)
             gameBoard[currentRow][currentColumn] = color
         }
     }
@@ -403,6 +408,7 @@ function flipPieces(row, column, color){
         let currentColumn = (column)
         for (let currentRow = (row + 1); currentRow < checkList[currentSlotID].endPointBottomLeft[0]; currentRow++){
             currentColumn--
+            console.log(`Flipping ${currentRow}, ${currentColumn}`)
             gameBoard[currentRow][currentColumn] = color
         }
     }
@@ -410,6 +416,7 @@ function flipPieces(row, column, color){
         let currentColumn = (column)
         for (let currentRow = (row - 1); currentRow > checkList[currentSlotID].endPointTopLeft[0]; currentRow--){
             currentColumn--
+            console.log(`Flipping ${currentRow}, ${currentColumn}`)
             gameBoard[currentRow][currentColumn] = color
         }
     }
@@ -439,7 +446,7 @@ function searchCoordFromID(slotID){
 
 function takeTurn(slotID, currentColor){
     let placeByCoord = searchCoordFromID(slotID)
-    //console.log(`You chose ${placeByCoord} with color ${currentColor}`)
+    console.log(`You chose ${placeByCoord} with color ${currentColor}`)
     placeColor(placeByCoord[0], placeByCoord[1], currentColor)
     clearCheckList()
     updateAvailableSpot(color)
@@ -474,9 +481,7 @@ function updateBoardVisual(currentBoardData){
 function clearBoard(){
     for (let row = 0; row < 8; row++){
         for (let column = 0; column < 8; column++){
-            console.log(`Cleared: ${row}, ${column}`)
             gameBoard[row][column] = 0
-
         }
     }
     for (let slotNum = 0; slotNum < 64; slotNum++){
@@ -485,6 +490,7 @@ function clearBoard(){
             button.classList.remove('buttonsWhite')
             button.classList.add('buttons')
     }
+    clearCheckList()
 }
 
 //set board up to starting position
@@ -494,8 +500,9 @@ function setStartingPieces(){
     gameBoard[4][4] = 2
     gameBoard[3][4] = 3
     gameBoard[4][3] = 3
+    color = 2
     updateAvailableSpot(2)
-    displayDebugGrid()
+    //displayDebugGrid()
     updateBoardVisual(getCurrentBoard())
 }
 
@@ -514,3 +521,6 @@ window.onload = function(){
 //SKIP ON NO AVAIL PLACEMENT
 //WIN CONDITION
 //AI(RANDOMIZER?)
+
+
+// COLOR DOES NOT CHANGE ON RESET BUTTON
