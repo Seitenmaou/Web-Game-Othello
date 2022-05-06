@@ -11,6 +11,12 @@
     grid-row: 1/4;
     background-color: rgb(47, 133, 30);
     margin: 10px;
+    text-align: center;
+}
+
+#scoreBoard {
+    display: grid;
+    grid-template-columns: auto auto;
 }
 
 #mainBoard {

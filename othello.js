@@ -481,6 +481,7 @@ function takeTurn(slotID, currentColor){
         displayDebugGrid()
     }
     updateBoardVisual(getCurrentBoard())
+    updateScores()
 }
 
 function getCurrentBoard (){
@@ -508,6 +509,26 @@ function updateBoardVisual(currentBoardData){
     }
 }
 
+function updateScores(){
+    let amountBlack = 0
+    let amountWhite = 0
+    for (let row = 0; row < 8; row++){
+        for (let column = 0; column < 8; column++){
+            if (gameBoard[row][column] == 2){
+                amountWhite++
+            } else if (gameBoard[row][column] == 3){
+                amountBlack++
+            } 
+        }
+    }
+    document.getElementById('scoreWhite').textContent = amountWhite
+    document.getElementById('scoreBlack').textContent = amountBlack
+}
+
+function updateTurnColor(){
+
+}
+
 function clearBoard(){
     for (let row = 0; row < 8; row++){
         for (let column = 0; column < 8; column++){
@@ -531,6 +552,9 @@ function clearBoard(){
 
 //set board up to starting position
 function setStartingPieces(){
+    if (debugging) {
+        console.log(`Start Game!`)
+    }
     clearBoard()
     gameBoard[3][3] = 2
     gameBoard[4][4] = 2
@@ -543,6 +567,7 @@ function setStartingPieces(){
     }
     
     updateBoardVisual(getCurrentBoard())
+    updateScores()
 }
 
 function startGame(){
@@ -560,6 +585,3 @@ window.onload = function(){
 //SKIP ON NO AVAIL PLACEMENT
 //WIN CONDITION
 //AI(RANDOMIZER?)
-
-
-// COLOR DOES NOT CHANGE ON RESET BUTTON

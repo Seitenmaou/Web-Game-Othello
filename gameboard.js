@@ -59,8 +59,13 @@ function addScoreBoard(){
     const tracker = document.querySelector('#gameTracker')
     const scoreBoard = document.createElement('div')
     scoreBoard.id = 'scoreBoard'
-    scoreBoard.innerHTML = '<h3>Score</h3><p>White</p><p>Black</p>'
     tracker.appendChild(scoreBoard)
+    const scoreWhite = document.createElement('div')
+    scoreWhite.innerHTML = `<p>White</p> <p id = 'scoreWhite'>0</p>`
+    scoreBoard.appendChild(scoreWhite)
+    const scoreBlack = document.createElement('div')
+    scoreBlack.innerHTML = `<p>Black</p> <p id = 'scoreBlack'>0</p>`
+    scoreBoard.appendChild(scoreBlack)
 }
 
 function addSystemButtons(){
