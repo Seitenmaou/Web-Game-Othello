@@ -10,6 +10,10 @@
 //3 as occupied by black ⚫
 //4 as best possible choice for placement maybe? ◎
 
+//shows all console logs
+const debugging = false
+
+
 //Board for game
 let gameBoard = [
     [0,0,0,0,0,0,0,0],
@@ -69,6 +73,9 @@ let checkList = []
 //clear array
 function clearCheckList(){
     for (let i = checkList.length; i >= 0 ; i--){
+        if (debugging) {
+            console.log (`Clearing ID ${i} from list`)
+        }
         checkList.pop()
     }
 }
@@ -353,7 +360,9 @@ function placeColor(row, column, currentColor){
     }else{
         //Reject
         //glow red or something?
-        console.log(`Cant place here!`)
+        if (debugging) {
+            console.log(`Cant place here!`)
+        }
     }
 }
 
@@ -364,26 +373,34 @@ function flipPieces(row, column, color){
     //get end location horiz, both ways, flip inbetween
     if (checkList[currentSlotID].isPlaceableRight){
         for (let currentColumn = (column + 1); currentColumn < checkList[currentSlotID].endPointRight[1]; currentColumn++){
-            console.log(`Flipping ${row}, ${currentColumn}`)
+            if (debugging) {
+                console.log(`Flipping ${row}, ${currentColumn}`)
+            }
             gameBoard[row][currentColumn] = color
         }
     }
     if (checkList[currentSlotID].isPlaceableLeft){
         for (let currentColumn = (column - 1); currentColumn > checkList[currentSlotID].endPointLeft[1]; currentColumn--){
-            console.log(`Flipping ${row}, ${currentColumn}`)
+            if (debugging) {
+                console.log(`Flipping ${row}, ${currentColumn}`)
+            }
             gameBoard[row][currentColumn] = color
         }
     }
     //get end location vert, both ways, flip inbetween
     if (checkList[currentSlotID].isPlaceableTop){
         for (let currentRow = (row - 1); currentRow > checkList[currentSlotID].endPointTop[0]; currentRow--){
-            console.log(`Flipping ${curentRow}, ${column}`)
+            if (debugging) {
+                console.log(`Flipping ${curentRow}, ${column}`)
+            }
             gameBoard[currentRow][column] = color
         }
     }
     if (checkList[currentSlotID].isPlaceableBottom){
         for (let currentRow = (row + 1); currentRow < checkList[currentSlotID].endPointBottom[0]; currentRow++){
-            console.log(`Flipping ${currentRow}, ${column}`)
+            if (debugging) {
+                console.log(`Flipping ${currentRow}, ${column}`)
+            }
             gameBoard[currentRow][column] = color
         }
     }
@@ -392,7 +409,9 @@ function flipPieces(row, column, color){
         let currentColumn = (column)
         for (let currentRow = (row - 1); currentRow > checkList[currentSlotID].endPointTopRight[0]; currentRow--){
             currentColumn++
-            console.log(`Flipping ${currentRow}, ${currentColumn}`)
+            if (debugging) {
+                console.log(`Flipping ${currentRow}, ${currentColumn}`)
+            }
             gameBoard[currentRow][currentColumn] = color
         }
     }
@@ -400,7 +419,9 @@ function flipPieces(row, column, color){
         let currentColumn = (column)
         for (let currentRow = (row + 1); currentRow < checkList[currentSlotID].endPointBottomRight[0]; currentRow++){
             currentColumn++
-            console.log(`Flipping ${currentRow}, ${currentColumn}`)
+            if (debugging) {
+                console.log(`Flipping ${currentRow}, ${currentColumn}`)
+            }
             gameBoard[currentRow][currentColumn] = color
         }
     }
@@ -408,7 +429,9 @@ function flipPieces(row, column, color){
         let currentColumn = (column)
         for (let currentRow = (row + 1); currentRow < checkList[currentSlotID].endPointBottomLeft[0]; currentRow++){
             currentColumn--
-            console.log(`Flipping ${currentRow}, ${currentColumn}`)
+            if (debugging) {
+                console.log(`Flipping ${currentRow}, ${currentColumn}`)
+            }
             gameBoard[currentRow][currentColumn] = color
         }
     }
@@ -416,7 +439,9 @@ function flipPieces(row, column, color){
         let currentColumn = (column)
         for (let currentRow = (row - 1); currentRow > checkList[currentSlotID].endPointTopLeft[0]; currentRow--){
             currentColumn--
-            console.log(`Flipping ${currentRow}, ${currentColumn}`)
+            if (debugging) {
+                console.log(`Flipping ${currentRow}, ${currentColumn}`)
+            }
             gameBoard[currentRow][currentColumn] = color
         }
     }
@@ -446,10 +471,15 @@ function searchCoordFromID(slotID){
 
 function takeTurn(slotID, currentColor){
     let placeByCoord = searchCoordFromID(slotID)
-    console.log(`You chose ${placeByCoord} with color ${currentColor}`)
+    if (debugging) {
+        console.log(`You chose ${placeByCoord} with color ${currentColor}`)
+    }
     placeColor(placeByCoord[0], placeByCoord[1], currentColor)
     clearCheckList()
     updateAvailableSpot(color)
+    if (debugging) {
+        displayDebugGrid()
+    }
     updateBoardVisual(getCurrentBoard())
 }
 
@@ -481,10 +511,16 @@ function updateBoardVisual(currentBoardData){
 function clearBoard(){
     for (let row = 0; row < 8; row++){
         for (let column = 0; column < 8; column++){
+            if (debugging) {
+                console.log (`Clearing ${row}, ${column}`)
+            }
             gameBoard[row][column] = 0
         }
     }
     for (let slotNum = 0; slotNum < 64; slotNum++){
+        if (debugging) {
+            console.log (`Resetting button class for ${slotNum}`)
+        }
         let button = document.getElementById(`button-${slotNum}`)
             button.classList.remove('buttonsBlack')
             button.classList.remove('buttonsWhite')
@@ -502,7 +538,10 @@ function setStartingPieces(){
     gameBoard[4][3] = 3
     color = 2
     updateAvailableSpot(2)
-    //displayDebugGrid()
+    if (debugging) {
+        displayDebugGrid()
+    }
+    
     updateBoardVisual(getCurrentBoard())
 }
 
