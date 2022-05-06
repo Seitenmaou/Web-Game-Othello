@@ -113,7 +113,7 @@ function isPlaceable(row, column, currentColor){
     listAddition.currentSlot[1] = column
     listAddition.slotID = boardSlot
 
-    if (gameBoard[row][column] == currentColor){
+    if (gameBoard[row][column] == 2 || gameBoard[row][column] == 3){
         checkList.push(listAddition)
         return listAddition.isPlaceable
     } else {
@@ -142,12 +142,15 @@ function isPlaceable(row, column, currentColor){
             if (gameBoard[row][column + 1] == (currentColor + modifier)){
                 //if opposing color, keep going, otherwise check next pos
                 //if own color after opposing color, return true, otherwise check next pos
-                for (let currentColumn = column; currentColumn <= 7; currentColumn++){
+                for (let currentColumn = column + 1; currentColumn <= 7; currentColumn++){
                     if (gameBoard[row][currentColumn] == currentColor){
                         listAddition.isPlaceable = true
                         listAddition.isPlaceableRight = true
                         listAddition.endPointRight[0] = row
                         listAddition.endPointRight[1] = currentColumn
+                        break
+                    } else if (gameBoard[row][currentColumn] == 0 || gameBoard[row][currentColumn] == 1) {
+                        break
                     }
                 }
             }
@@ -161,12 +164,15 @@ function isPlaceable(row, column, currentColor){
             if (gameBoard[row + 1][column] == (currentColor + modifier)){
                 //if opposing color, keep going, otherwise check next pos
                 //if own color after opposing color, return true, otherwise check next pos
-                for (let currentRow = row; currentRow <= 7; currentRow++){
+                for (let currentRow = (row + 1); currentRow <= 7; currentRow++){
                     if (gameBoard[currentRow][column] == currentColor){
                         listAddition.isPlaceable = true
                         listAddition.isPlaceableBottom = true
                         listAddition.endPointBottom[0] = currentRow
                         listAddition.endPointBottom[1] = column
+                        break
+                    } else if (gameBoard[currentRow][column] == 0 || gameBoard[currentRow][column] == 1) {
+                        break
                     }
                 }
             }
@@ -180,12 +186,15 @@ function isPlaceable(row, column, currentColor){
             if (gameBoard[row][column - 1] == (currentColor + modifier)){
                 //if opposing color, keep going, otherwise check next pos
                 //if own color after opposing color, return true, otherwise check next pos
-                for (let currentColumn = column; currentColumn >= 0; currentColumn--){
+                for (let currentColumn = (column - 1); currentColumn >= 0; currentColumn--){
                     if (gameBoard[row][currentColumn] == currentColor){
                         listAddition.isPlaceable = true
                         listAddition.isPlaceableLeft = true
                         listAddition.endPointLeft[0] = row
                         listAddition.endPointLeft[1] = currentColumn
+                        break
+                    } else if (gameBoard[row][currentColumn] == 0 || gameBoard[row][currentColumn] == 1) {
+                        break
                     }
                 }
             } 
@@ -199,12 +208,15 @@ function isPlaceable(row, column, currentColor){
             if (gameBoard[row - 1][column] == (currentColor + modifier)){
                 //if opposing color, keep going, otherwise check next pos
                 //if own color after opposing color, return true, otherwise chec next pos
-                for (let currentRow = row; currentRow >= 0; currentRow--){
+                for (let currentRow = (row - 1); currentRow >= 0; currentRow--){
                     if (gameBoard[currentRow][column] == currentColor){
                         listAddition.isPlaceable = true
                         listAddition.isPlaceableTop = true
                         listAddition.endPointTop[0] = currentRow
                         listAddition.endPointTop[1] = column
+                        break
+                    } else if (gameBoard[currentRow][column] == 0 || gameBoard[currentRow][column] == 1) {
+                        break
                     }
                 }
             }
@@ -220,12 +232,15 @@ function isPlaceable(row, column, currentColor){
             if (gameBoard[row - 1][column + 1] == (currentColor + modifier)){
                 //if opposing color, keep going, otherwise check next pos
                 //if own color after opposing color, return true, otherwise check next pos
-                for (let i = 0; ((row - i >= 0) && (column + i <= 7)); i++){
+                for (let i = 1; ((row - i >= 0) && (column + i <= 7)); i++){
                     if (gameBoard[row - i][column + i] == currentColor){
                         listAddition.isPlaceable = true
                         listAddition.isPlaceableTopRight = true
                         listAddition.endPointTopRight[0] = (row - i)
                         listAddition.endPointTopRight[1] = (column + i)
+                        break
+                    } else if (gameBoard[row - i][column + i] == 0 || gameBoard[row - i][column + i] == 1) {
+                        break
                     }
                 }
             }
@@ -234,17 +249,20 @@ function isPlaceable(row, column, currentColor){
     
     function checkBottomRight(){
         //if not near border
-        if (row < 6 && column > 1){
+        if (row < 6 && column < 6){
             //check bottom left
             if (gameBoard[row + 1][column + 1] == (currentColor + modifier)){
                 //if opposing color, keep going, otherwise check next pos
                 //if own color after opposing color, return true, otherwise check next pos
-                for (let i = 0; ((row + i <= 7) && (column + i <= 7)); i++){
+                for (let i = 1; ((row + i <= 7) && (column + i <= 7)); i++){
                     if (gameBoard[row + i][column + i] == currentColor){
                         listAddition.isPlaceable = true
                         listAddition.isPlaceableBottomRight = true
                         listAddition.endPointBottomRight[0] = (row + i)
                         listAddition.endPointBottomRight[1] = (column + i)
+                        break
+                    } else if (gameBoard[row + i][column + i] == 0 || gameBoard[row + i][column + i] == 1) {
+                        break
                     }
                 }
             }
@@ -258,12 +276,15 @@ function isPlaceable(row, column, currentColor){
             if (gameBoard[row + 1][column - 1] == (currentColor + modifier)){
                 //if opposing color, keep going, otherwise check next pos
                 //if own color after opposing color, return true, otherwise check next pos
-                for (let i = 0; ((row + i <= 7) && (column - i >= 0)); i++){
+                for (let i = 1; ((row + i <= 7) && (column - i >= 0)); i++){
                     if (gameBoard[row + i][column - i] == currentColor){
                         listAddition.isPlaceable = true
                         listAddition.isPlaceableBottomLeft = true
                         listAddition.endPointBottomLeft[0] = (row + i)
                         listAddition.endPointBottomLeft[1] = (column - i)
+                        break
+                    } else if (gameBoard[row + i][column - i] ==  0 || gameBoard[row + i][column - i] ==  1) {
+                        break
                     }
                 }
             }
@@ -277,12 +298,15 @@ function isPlaceable(row, column, currentColor){
             if (gameBoard[row - 1][column - 1] == (currentColor + modifier)){
                 //if opposing color, keep going, otherwise check next pos
                 //if own color after opposing color, return true, otherwise check next pos
-                for (let i = 0; ((row - i >= 0) && (column - i >= 0)); i++){
+                for (let i = 1; ((row - i >= 0) && (column - i >= 0)); i++){
                     if (gameBoard[row - i][column - i] == currentColor){
                         listAddition.isPlaceable = true
-                        listAddition.isPlaceableBottomLeft = true
+                        listAddition.isPlaceableTopLeft = true
                         listAddition.endPointTopLeft[0] = (row - i)
                         listAddition.endPointTopLeft[1] = (column - i)
+                        break
+                    } else if (gameBoard[row - i][column - i] ==  0 || gameBoard[row - i][column - i] ==  1) {
+                        break
                     }
                 }
             }
@@ -315,11 +339,8 @@ function placeColor(row, column, currentColor){
         //confirm
         //highlight possible changes in green?
         gameBoard[row][column] = currentColor;
-        console.log(`Placed!`)
-        console.log(checkList)
         //flip all affected
         flipPieces(row, column, currentColor)
-        console.log(`Flipped`)
 
         if (currentColor == 2){
             color = 3
@@ -358,11 +379,40 @@ function flipPieces(row, column, color){
         }
     }
     if (checkList[currentSlotID].isPlaceableBottom){
-        for (let currentRow = (row + 1); currentRow <= checkList[currentSlotID].endPointBottom[1]; currentRow++){
+        for (let currentRow = (row + 1); currentRow <= checkList[currentSlotID].endPointBottom[0]; currentRow++){
             gameBoard[currentRow][column] = color
         }
     }
     //get end location vert, all 4 ways, flip inbetween
+    if (checkList[currentSlotID].isPlaceableTopRight){
+        let currentColumn = (column)
+        for (let currentRow = (row - 1); currentRow > checkList[currentSlotID].endPointTopRight[0]; currentRow--){
+            currentColumn++
+            gameBoard[currentRow][currentColumn] = color
+        }
+    }
+    if (checkList[currentSlotID].isPlaceableBottomRight){
+        let currentColumn = (column)
+        for (let currentRow = (row + 1); currentRow < checkList[currentSlotID].endPointBottomRight[0]; currentRow++){
+            
+            currentColumn++
+            gameBoard[currentRow][currentColumn] = color
+        }
+    }
+    if (checkList[currentSlotID].isPlaceableBottomLeft){
+        let currentColumn = (column)
+        for (let currentRow = (row + 1); currentRow < checkList[currentSlotID].endPointBottomLeft[0]; currentRow++){
+            currentColumn--
+            gameBoard[currentRow][currentColumn] = color
+        }
+    }
+    if (checkList[currentSlotID].isPlaceableTopLeft){
+        let currentColumn = (column)
+        for (let currentRow = (row - 1); currentRow > checkList[currentSlotID].endPointTopLeft[0]; currentRow--){
+            currentColumn--
+            gameBoard[currentRow][currentColumn] = color
+        }
+    }
 
 
 }
@@ -389,14 +439,11 @@ function searchCoordFromID(slotID){
 
 function takeTurn(slotID, currentColor){
     let placeByCoord = searchCoordFromID(slotID)
-    console.log(`You chose ${placeByCoord} with color ${currentColor}`)
+    //console.log(`You chose ${placeByCoord} with color ${currentColor}`)
     placeColor(placeByCoord[0], placeByCoord[1], currentColor)
     clearCheckList()
     updateAvailableSpot(color)
-    displayDebugGrid()
     updateBoardVisual(getCurrentBoard())
-    
-    
 }
 
 function getCurrentBoard (){
@@ -424,8 +471,25 @@ function updateBoardVisual(currentBoardData){
     }
 }
 
+function clearBoard(){
+    for (let row = 0; row < 8; row++){
+        for (let column = 0; column < 8; column++){
+            console.log(`Cleared: ${row}, ${column}`)
+            gameBoard[row][column] = 0
+
+        }
+    }
+    for (let slotNum = 0; slotNum < 64; slotNum++){
+        let button = document.getElementById(`button-${slotNum}`)
+            button.classList.remove('buttonsBlack')
+            button.classList.remove('buttonsWhite')
+            button.classList.add('buttons')
+    }
+}
+
 //set board up to starting position
 function setStartingPieces(){
+    clearBoard()
     gameBoard[3][3] = 2
     gameBoard[4][4] = 2
     gameBoard[3][4] = 3
@@ -437,28 +501,6 @@ function setStartingPieces(){
 
 function startGame(){
     setStartingPieces()
-    //wait for button, then change turn
-
-
-
-    //nextTurn(2)
-
-    // console.log('START!')
-    // displayDebugGrid()
-    // updateAvailableSpot(2)
-    // console.log('WHITE AVAIL PLACEMENT')
-    // displayDebugGrid()
-    // placeColor(4, 2, 2)
-    // clearCheckList()
-    // updateAvailableSpot(3)
-    // console.log('BLACK AVAIL PLACEMENT')
-    // displayDebugGrid()
-    // placeColor(3, 2, 3)
-    // clearCheckList()
-    // updateAvailableSpot(2)
-    // console.log('WHITE AVAIL PLACEMENT')
-    // displayDebugGrid()
-    // console.log(checkList)
 
 }
 
@@ -468,3 +510,7 @@ window.onload = function(){
     startGame()
 }
 
+//TODO LIST
+//SKIP ON NO AVAIL PLACEMENT
+//WIN CONDITION
+//AI(RANDOMIZER?)
