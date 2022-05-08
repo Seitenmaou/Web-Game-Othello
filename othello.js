@@ -11,7 +11,7 @@
 //4 as best possible choice for placement maybe? ◎
 
 //shows all console logs
-const debugging = false
+const debugging = true
 
 
 //Board for game
@@ -73,15 +73,18 @@ let checkList = []
 //clear array
 function clearCheckList(){
     for (let i = checkList.length; i >= 0 ; i--){
-        if (debugging) {
-            console.log (`Clearing ID ${i} from list`)
-        }
         checkList.pop()
+    }
+    if (debugging) {
+        console.log (`Clearing list!`)
     }
 }
 
 //check surronding pieces to see if placeable
 function isPlaceable(row, column, currentColor){
+    if (debugging) {
+        console.log (`Checking Placeable with color ${currentColor}!`)
+    }
     //modifer for color check
     let modifier = 0
     if (currentColor == 3){
@@ -324,6 +327,9 @@ function isPlaceable(row, column, currentColor){
 //function to set surronding peices to available once board updates
 //gameboard perspectives (to show avail placement) maybe?
 function updateAvailableSpot(currentColor){
+    if (debugging) {
+        console.log (`Updating gameboard!`)
+    }
     boardSlot = 0 
     let spotAvailable = false
     for (let row = 0; row <= 7; row++){
@@ -342,20 +348,26 @@ function updateAvailableSpot(currentColor){
 
 //function to place a color
 function placeColor(row, column, currentColor){
+    if (debugging) {
+        console.log(checkList)
+        console.log(`You chose ${row}, ${column} with color ${currentColor}`)
+    }
     if (isPlaceable(row, column, currentColor)){
         //confirm
         //highlight possible changes in green?
         gameBoard[row][column] = currentColor;
         //flip all affected
         flipPieces(row, column, currentColor)
-
+        //Next turn
         if (currentColor == 2){
             color = 3
         } else {
             color = 2
         }
-
-        //Next turn
+        if (debugging) {
+            console.log(checkList)
+            console.log(`Placed! ${currentColor}`)
+        }
 
     }else{
         //Reject
@@ -391,7 +403,7 @@ function flipPieces(row, column, color){
     if (checkList[currentSlotID].isPlaceableTop){
         for (let currentRow = (row - 1); currentRow > checkList[currentSlotID].endPointTop[0]; currentRow--){
             if (debugging) {
-                console.log(`Flipping ${curentRow}, ${column}`)
+                console.log(`Flipping ${currentRow}, ${column}`)
             }
             gameBoard[currentRow][column] = color
         }
@@ -471,10 +483,9 @@ function searchCoordFromID(slotID){
 
 function takeTurn(slotID, currentColor){
     let placeByCoord = searchCoordFromID(slotID)
-    if (debugging) {
-        console.log(`You chose ${placeByCoord} with color ${currentColor}`)
-    }
+    
     placeColor(placeByCoord[0], placeByCoord[1], currentColor)
+
     clearCheckList()
     updateAvailableSpot(color)
     if (debugging) {
@@ -482,6 +493,46 @@ function takeTurn(slotID, currentColor){
     }
     updateBoardVisual(getCurrentBoard())
     updateScores()
+
+    //if no spot is avail
+    if (!isPlaceableAnywhere()){
+        if (debugging){
+            console.log(`Skipping Turn for ${color}`)
+        }
+        if (color == 2){
+            color = 3
+        } else {
+            color = 2
+        }
+        if (debugging){
+            console.log(`Current Color: ${color}`)
+        }
+        clearCheckList()
+        updateAvailableSpot(color)
+        if (debugging) {
+            displayDebugGrid()
+            console.log(checkList)
+        }
+        updateBoardVisual(getCurrentBoard())
+        updateScores()
+        //if no spot is available again
+        if (!isPlaceableAnywhere()){
+            if (debugging){
+                console.log(`No turn available!`)
+            }
+            gameOver()
+        }
+    }
+    
+}
+
+function isPlaceableAnywhere(){
+    for (let i = 0; i < 64; i++){
+        if (checkList[i].isPlaceable){
+            return true
+        }
+    }
+    return false;
 }
 
 function getCurrentBoard (){
@@ -532,23 +583,47 @@ function updateTurnColor(){
 function clearBoard(){
     for (let row = 0; row < 8; row++){
         for (let column = 0; column < 8; column++){
-            if (debugging) {
-                console.log (`Clearing ${row}, ${column}`)
-            }
             gameBoard[row][column] = 0
         }
     }
+    if (debugging) {
+        console.log (`Clearing board!`)
+    }
     for (let slotNum = 0; slotNum < 64; slotNum++){
-        if (debugging) {
-            console.log (`Resetting button class for ${slotNum}`)
-        }
         let button = document.getElementById(`button-${slotNum}`)
             button.classList.remove('buttonsBlack')
             button.classList.remove('buttonsWhite')
             button.classList.add('buttons')
     }
+    if (debugging) {
+        console.log (`Resetting button classes!`)
+    }
     clearCheckList()
+    if (debugging) {
+        console.log (`Resetting winner announcement!`)
+    }
+    document.getElementById('winnerWhite').style.color = 'rgb(47, 133, 30)';
+    document.getElementById('winnerBlack').style.color = 'rgb(47, 133, 30)';
+    document.getElementById('scoreTied').style.color = 'rgb(47, 133, 30)';
 }
+
+function gameOver(){
+    //Total up the score
+    //Display winner
+    if (debugging){
+        console.log(`White: ${document.getElementById('scoreWhite').textContent} Black: ${document.getElementById('scoreBlack').textContent}`)
+    }
+    if (document.getElementById('winnerWhite').textContent > document.getElementById('scoreBlack').textContent){
+        document.getElementById('winnerWhite').style.color = 'rgb(255, 243, 138)'
+    } else if (document.getElementById('winnerBlack').textContent < document.getElementById('scoreBlack').textContent){
+        document.getElementById('winnerBlack').style.color = 'rgb(255, 243, 138)'
+    } else {
+        document.getElementById('scoreTied').style.color = 'rgb(255, 243, 138)'
+    }
+
+}
+
+
 
 //set board up to starting position
 function setStartingPieces(){
@@ -560,8 +635,8 @@ function setStartingPieces(){
     gameBoard[4][4] = 2
     gameBoard[3][4] = 3
     gameBoard[4][3] = 3
-    color = 2
-    updateAvailableSpot(2)
+    color = 3
+    updateAvailableSpot(color)
     if (debugging) {
         displayDebugGrid()
     }
@@ -576,12 +651,10 @@ function startGame(){
 }
 
 
-let color = 2 //start with white
+let color = 3 //start with white
 window.onload = function(){
     startGame()
 }
 
 //TODO LIST
-//SKIP ON NO AVAIL PLACEMENT
-//WIN CONDITION
 //AI(RANDOMIZER?)

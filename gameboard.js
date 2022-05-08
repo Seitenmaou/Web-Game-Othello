@@ -61,11 +61,16 @@ function addScoreBoard(){
     scoreBoard.id = 'scoreBoard'
     tracker.appendChild(scoreBoard)
     const scoreWhite = document.createElement('div')
-    scoreWhite.innerHTML = `<p>White</p> <p id = 'scoreWhite'>0</p>`
+    scoreWhite.innerHTML = `<p>White</p> <p id = 'scoreWhite'>0</p> <p id= 'winnerWhite'>Winner!</p>`
     scoreBoard.appendChild(scoreWhite)
     const scoreBlack = document.createElement('div')
-    scoreBlack.innerHTML = `<p>Black</p> <p id = 'scoreBlack'>0</p>`
+    scoreBlack.innerHTML = `<p>Black</p> <p id = 'scoreBlack'>0</p> <p id= 'winnerBlack'>Winner!</p>`
     scoreBoard.appendChild(scoreBlack)
+    
+    const scoreTied = document.createElement('p')
+    scoreTied.id = 'scoreTied'
+    scoreTied.textContent = 'Tied!'
+    tracker.append(scoreTied)
 }
 
 function addSystemButtons(){
