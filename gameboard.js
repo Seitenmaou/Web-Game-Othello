@@ -61,10 +61,14 @@ function addScoreBoard(){
     scoreBoard.id = 'scoreBoard'
     tracker.appendChild(scoreBoard)
     const scoreWhite = document.createElement('div')
+    scoreWhite.id = 'scoreWhiteContainer'
+    scoreWhite.className = 'scoreContainer'
     scoreWhite.innerHTML = `<p>White</p> <p id = 'scoreWhite'>0</p> <p id= 'winnerWhite'>Winner!</p>`
     scoreBoard.appendChild(scoreWhite)
     const scoreBlack = document.createElement('div')
-    scoreBlack.innerHTML = `<p>Black</p> <p id = 'scoreBlack'>0</p> <p id= 'winnerBlack'>Winner!</p>`
+    scoreBlack.className = 'scoreContainer'
+    scoreBlack.id = 'scoreBlackContainer'
+    scoreBlack.innerHTML = `<p >Black</p> <p id = 'scoreBlack'>0</p> <p id= 'winnerBlack'>Winner!</p>`
     scoreBoard.appendChild(scoreBlack)
     
     const scoreTied = document.createElement('p')
@@ -79,19 +83,19 @@ function addSystemButtons(){
     const resetButton = document.createElement('button')
     resetButton.id = 'resetButton'
     resetButton.textContent = 'RESET'
-
-    const hintButton = document.createElement('button')
-    hintButton.id = 'hintButton'
-    hintButton.textContent = 'HINT'
-
     tracker.appendChild(resetButton)
-    tracker.appendChild(hintButton)
+
+    // const hintButton = document.createElement('button')
+    // hintButton.id = 'hintButton'
+    // hintButton.textContent = 'HINT'
+    // tracker.appendChild(hintButton)
 
     resetButton.addEventListener('click', () => {
         startGame()
     })
-
 }
+
+
 
 addGamePanel()
 addBoard()

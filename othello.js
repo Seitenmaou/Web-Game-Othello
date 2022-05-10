@@ -493,6 +493,7 @@ function takeTurn(slotID, currentColor){
     }
     updateBoardVisual(getCurrentBoard())
     updateScores()
+    updateTurnColor(color)
 
     //if no spot is avail
     if (!isPlaceableAnywhere()){
@@ -576,8 +577,26 @@ function updateScores(){
     document.getElementById('scoreBlack').textContent = amountBlack
 }
 
-function updateTurnColor(){
-
+function updateTurnColor(currentColor){
+    let containerWhite = document.getElementById('scoreWhiteContainer')
+    let containerBlack = document.getElementById('scoreBlackContainer')
+    let whiteWinnerText = document.getElementById('winnerWhite')
+    let blackWinnerText = document.getElementById('winnerBlack')
+    if (currentColor == 2){
+        containerBlack.classList.remove('currentScoreContainer')
+        containerBlack.classList.add('scoreContainer')
+        containerWhite.classList.remove('scoreContainer')
+        containerWhite.classList.add('currentScoreContainer')
+        whiteWinnerText.style.color = 'rgb(208, 255, 199)'
+        blackWinnerText.style.color = 'rgb(47, 133, 30)'
+    } else {
+        containerWhite.classList.remove('currentScoreContainer')
+        containerWhite.classList.add('scoreContainer')
+        containerBlack.classList.remove('scoreContainer')
+        containerBlack.classList.add('currentScoreContainer')
+        blackWinnerText.style.color = 'rgb(208, 255, 199)'
+        whiteWinnerText.style.color = 'rgb(47, 133, 30)'
+    }
 }
 
 function clearBoard(){
@@ -610,14 +629,26 @@ function clearBoard(){
 function gameOver(){
     //Total up the score
     //Display winner
+    let scoreWhite = parseInt(document.getElementById('scoreWhite').textContent)
+    let scoreBlack = parseInt(document.getElementById('scoreBlack').textContent)
     if (debugging){
-        console.log(`White: ${document.getElementById('scoreWhite').textContent} Black: ${document.getElementById('scoreBlack').textContent}`)
+        console.log(`White: ${scoreWhite} Black: ${scoreBlack}`)
+        console.log(typeof scoreWhite, typeof scoreBlack)
     }
-    if (document.getElementById('winnerWhite').textContent > document.getElementById('scoreBlack').textContent){
+    if (scoreWhite > scoreBlack){
+        if (debugging){
+            console.log(`White wins!`)
+        }
         document.getElementById('winnerWhite').style.color = 'rgb(255, 243, 138)'
-    } else if (document.getElementById('winnerBlack').textContent < document.getElementById('scoreBlack').textContent){
+    } else if (scoreWhite < scoreBlack){
+        if (debugging){
+            console.log(`Black wins!`)
+        }
         document.getElementById('winnerBlack').style.color = 'rgb(255, 243, 138)'
     } else {
+        if (debugging){
+            console.log(`Tie!`)
+        }
         document.getElementById('scoreTied').style.color = 'rgb(255, 243, 138)'
     }
 
@@ -643,6 +674,7 @@ function setStartingPieces(){
     
     updateBoardVisual(getCurrentBoard())
     updateScores()
+    updateTurnColor(color)
 }
 
 function startGame(){
