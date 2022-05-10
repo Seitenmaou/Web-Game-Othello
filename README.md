@@ -13,4 +13,5 @@ And figured the game logic can be replicated in programming.
 
 The website is html, css for looks, javascript for functionality.
 
-The functions in game should work as intended.
+Known bugs:
+Turn indicator does not update when a turn is skipped
