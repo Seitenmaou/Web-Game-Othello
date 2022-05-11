@@ -516,6 +516,7 @@ function takeTurn(slotID, currentColor){
         }
         updateBoardVisual(getCurrentBoard())
         updateScores()
+        updateTurnColor(color)
         //if no spot is available again
         if (!isPlaceableAnywhere()){
             if (debugging){
